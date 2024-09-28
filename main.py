@@ -150,4 +150,11 @@ def backend_test():
     df_prices = get_data(symbols, dates)
     print("Data:")
     print(df_prices.head())
+
+    allocs = [0.4, 0.3, 0.3]
+    sv = 10000
+
+    port_val = get_portfolio_returns(df_prices, allocs, sv)
+    print(f"\nget_portfolio_returns() returns: \n{port_val.head(10)}")
+
     return "<p>This should have created a dataframe and printed it in the console.</p>"

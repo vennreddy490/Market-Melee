@@ -34,3 +34,19 @@ def get_data(symbols, dates, path="data"):
         df_final = df_final.dropna()
 
     return df_final
+
+def get_portfolio_returns(prices, allocations, start_val=10000):
+    
+    
+    stock_symbols = prices.columns.values
+    portfolio_by_symbol = {symbol: None for symbol in stock_symbols}
+
+    # Stores each df in the dict, instead of making a temp one for each, so I can join them all at once,
+    # saving memory and increasing speed
+    for i in range(0, len(prices.columns)):
+        temp_df = prices[prices.columns[i]]
+        portfolio_by_symbol[stock_symbols[i]] = ((temp_df/temp_df[0]) * allocations[i] * start_val).round(3)
+
+    total_portfolio = pd.concat(portfolio_by_symbol.values(), axis=1)
+    total_portfolio = total_portfolio.sum(axis=1)
+    return total_portfolio
