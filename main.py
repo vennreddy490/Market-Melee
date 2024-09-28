@@ -4,6 +4,7 @@ from pymongo.server_api import ServerApi
 import os
 from flask_bcrypt import Bcrypt
 from dotenv import load_dotenv
+from portfolio_analysis.assess_portfolio import *
 
 load_dotenv()
 
@@ -141,3 +142,12 @@ def mongo_test():
         print(e)
 
     return "<p>This should have added a user.</p>"
+
+@app.route("/backend_test")
+def backend_test():
+    dates = pd.date_range('2024-08-01', '2024-09-27')
+    symbols = ['GOOG', 'AAPL', 'XOM']
+    df_prices = get_data(symbols, dates)
+    print("Data:")
+    print(df_prices.head())
+    return "<p>This should have created a dataframe and printed it in the console.</p>"
