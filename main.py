@@ -158,3 +158,36 @@ def backend_test():
     print(f"\nget_portfolio_returns() returns: \n{port_val.head(10)}")
 
     return "<p>This should have created a dataframe and printed it in the console.</p>"
+
+@app.route("/user_data_test")
+def user_data_test():
+    username = session.get('username')
+    user_data = test_collection.find_one({'user': username})
+
+    print(f"The user is: {username}")
+
+    allocs = user_data.get('allocations', [])
+    sv = user_data.get('portfolio_value', 0)
+
+    # print(f"symbols: {symbols}")
+    # print(f"allocs: {allocs}")
+    # print(f"sv: {sv}")
+
+    dates = pd.date_range('2024-08-01', '2024-09-27')
+    symbols = user_data.get('collection_of_stocks', [])
+    df_prices = get_data(symbols, dates)
+    print("Data:")
+    print(df_prices.head())
+
+    allocs = user_data.get('allocations', [])
+    allocs = [alloc / 100 for alloc in allocs]
+    sv = user_data.get('portfolio_value', 0)
+
+    print(f"\nHere is the value getting passed in for allocs: {allocs}")
+    print(f"\nHere is the value getting passed in for sv: {sv}")
+
+
+    port_val = get_portfolio_returns(df_prices, allocs, sv)
+    print(f"\nget_portfolio_returns() returns: \n{port_val.head(10)}")
+
+    return "<p>This should have created a dataframe and printed it in the console.</p>"
