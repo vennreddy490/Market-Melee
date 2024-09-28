@@ -1,0 +1,13 @@
+<!doctype html>
+<html>
+<head>
+    <title>Dashboard</title>
+</head>
+<body>
+    <h1>Welcome, {{ user['user'] }}!</h1>
+    <p>Your portfolio value: {{ user['portfolio_value'] }}</p>
+    <p>Your stocks: {{ user['collection_of_stocks'] }}</p>
+    <p>Your allocations: {{ user['allocations'] }}</p>
+    <a href="{{ url_for('update_portfolio') }}">Update Portfolio</a>
+</body>
+</html>

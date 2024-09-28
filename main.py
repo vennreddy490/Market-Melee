@@ -70,10 +70,37 @@ def login():
             return redirect(url_for('login'))
     return render_template('login.html')
 
+# Provides a route to allow users to update their stock collection & allocations
+# TODO: Add login required wrapper around this thing
+@app.route('/update_portfolio', methods=['GET', 'POST'])
+def update_portfolio():
+    if request.method == 'POST':
+        username = session['username']
+        # Collect form data
+        collection_of_stocks = request.form.getlist('stocks')
+        allocations = request.form.getlist('allocations')
+        portfolio_value = int(request.form['portfolio_value'])
+
+        # Update the user data in MongoDB
+        test_collection.update_one(
+            {'user': username},
+            {'$set': {
+                'collection_of_stocks': collection_of_stocks,
+                'allocations': [float(a) for a in allocations],
+                'portfolio_value': portfolio_value
+            }}
+        )
+        return redirect(url_for('dashboard'))
+    return render_template('update_portfolio.html')
+
+
 # Dashboard Route (To be implemented later)
 @app.route("/dashboard")
 def dashboard():
-    return "<p>Hello, World!</p>"
+    username = session['username']
+    # Fetch user data
+    user = test_collection.find_one({'user': username})
+    return render_template('dashboard.html', user=user)
 
 # Tests Mongo_db connection, used for debugging
 @app.route("/mongo_test")
