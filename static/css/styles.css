@@ -21,3 +21,8 @@ nav img {
 .authModal h1 {
     padding-bottom: 40px;
 }
+
+.welcome {
+    text-align: center;
+    margin-top: 5%;
+}

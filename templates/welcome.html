@@ -1,1 +1,39 @@
-<!-- Use Jumbotron Bootstrap Components-->
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!-- Bootstrap CSS-->
+        <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+        <!-- Global CSS-->
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+        <script>
+            function goLogin() {
+                window.location.href = 'login';
+            }
+            function goRegister() {
+                window.location.href = 'register';
+            }
+        </script>
+    </head>
+    <body>
+        <div class="jumbotron welcome">
+            <h1 class="display-3"> Hello Trader! </h1>
+            <p class="lead">Have you ever wanted to trade stocks, but don't have the money to do so? 
+                Perhaps, maybe you want to battle it out against fellow traders?</p>
+            <hr class="my-4">
+            <p>
+                Learning how to trade stocks and competing for the best portfolio has never been easier than today!
+                Join now to start the melee!
+            </p>
+            <div class="welcomeButton">
+                <button type="button" class="btn btn-secondary btn-lg" onclick="goRegister()">Register</button>
+                <button type="button" class="btn btn-secondary btn-lg" onclick="goLogin()">Login</button>
+            </div>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+    </body>
+</html>
