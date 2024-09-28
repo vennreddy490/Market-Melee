@@ -190,4 +190,12 @@ def user_data_test():
     port_val = get_portfolio_returns(df_prices, allocs, sv)
     print(f"\nget_portfolio_returns() returns: \n{port_val.head(10)}")
 
+    directory = 'user_portfolios'
+    
+    filename = f"{session['username']}_portfolio.csv"
+    file_path = os.path.join(directory, filename)
+
+    # port_val.to_csv(file_path, index=True)
+    port_val.to_csv(file_path, index=False)
+
     return "<p>This should have created a dataframe and printed it in the console.</p>"
