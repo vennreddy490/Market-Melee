@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Hello There</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!-- Bootstrap CSS-->
+        <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+        <!-- Global CSS-->
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+
+    </head>
+    <body>
+        <nav class="navbar" style="background-color: #D6EFD8;">
+            <a class="navbar-brand h1" style="color: black">Market Melee</a>
+            <div class="ml-auto d-flex align-items-center justify-content-end">
+                <img src="{{ url_for('static', filename='images/crown.png') }}" alt="Crown" class="img-fluid">
+            </div>
+            <div class="ml-auto">
+                <button class="btn btn primary mr-2" style="background-color: #80AF81">Test</button>
+                <button class="btn btn primary" style="background-color: #80AF81">Test2</button>
+            </div>
+        </nav>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+    </body>
+</html>
