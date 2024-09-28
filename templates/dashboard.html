@@ -1,9 +1,72 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>Welcome, {{ user['user'] }}!</h1>
-    <p>Your portfolio value: {{ user['portfolio_value'] }}</p>
-    <p>Your stocks: {{ user['collection_of_stocks'] }}</p>
-    <p>Your allocations: {{ user['allocations'] }}</p>
-    <a href="{{ url_for('update_portfolio') }}">Update Portfolio</a>
+    <div class="container-fluid dashboard">
+        <div class="row flex-nowrap">
+            <!--First Column-->
+            <div class="col-md-5 current-portfolio">
+                <h1>Welcome Back, {{ user['user'] }}!</h1>
+                <h2>Current Portfolio</h2>
+                <hr class="line">
+                <div class="row stock-allocs">
+                    <div class="col-md-6">
+                        <h4>Stocks: </h4>
+                        {% for stock in user['collection_of_stocks'] %}
+                            <p>{{ stock }}</p>
+                        {% endfor %}
+                    </div>
+                    <div class="col-md-6">
+                        <h4>Allocations: </h4>
+                        {% for alloc in user['allocations'] %}
+                            <p>{{ alloc }}%</p>
+                        {% endfor %}
+                    </div>
+                </div>
+                <h3>Total Value:</h3>
+                <hr class="line">
+                <div class="d-flex justify-content-center mt-2 mb-4">
+                    <button class="btn btn-secondary btn-lg w-50">Update Portfolio</button>
+                </div>
+            </div>
+            <!-- Second Column (Vertical Line)-->
+            <div class="col-md-1 line-container">
+                <div class="vertical-line"></div>
+            </div>
+
+            <!-- Third Column -->
+            <div class="col-md-6 stock-stats">
+                <h1>Stock Stats</h1>
+                <h5>Select a Stock to Learn More!</h5>
+                <form>
+                    <div class="form-group row align-items-center checkStats">
+                    
+                        <label class="col-auto col-form-label"for="symbolInput">Symbol</label>
+                        <div class="col-auto">
+                            <input type="text" class="form-control" list="symbolList" 
+                                id="symbolInput" placeholder="Enter a Symbol:">
+                                <datalist id="symbolList">
+                                    {% for symbol in sp500_symbols %}
+                                        <option value="{{ symbol }}"></option>
+                                    {% endfor %}
+                                </datalist>
+                        </div>
+                        <div class="col-auto">
+                            <button type="submit" class="btn btn-secondary ms-3s">Check Stats</button>
+                        </div>
+                    </div>
+                </form>
+                {% if valid_stock %}
+                    <p>sfsddf</p>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6>Daily Returns: {{ stock_stats['Daily Returns'] }}</h6>
+                        </div>
+                        <div class="col-md-6">
+
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
 {% endblock %}

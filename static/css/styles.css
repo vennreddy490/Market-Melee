@@ -26,3 +26,50 @@ nav img {
     text-align: center;
     margin-top: 5%;
 }
+
+.current-portfolio {
+    margin-top: 30px;
+    margin-left: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+    background-color: #FFFDD0;
+    border-radius: 20px;
+}
+
+.current-portfolio h1, h2 {
+    padding-top: 10px;
+    text-align: center;
+}
+
+.line {
+    border: none;
+    border-top: 3px solid #333; /* Darker line color */
+    width: 80%;
+}
+
+.stock-allocs {
+    margin-left: 10%;
+}
+
+.line-container {
+    display: flex;
+    justify-content: center;  
+    align-items: right;      
+}
+
+.vertical-line {
+    border-right: 2px solid black;
+    margin-top: 70%;
+    height: 80%;
+}
+
+.stock-stats {
+    margin-top: 30px;
+    text-align: center;
+}
+
+.checkStats {
+    margin-top: 30px;
+    justify-content: center;
+}

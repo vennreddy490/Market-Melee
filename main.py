@@ -125,11 +125,11 @@ def dashboard():
     # Generate list of S&P 500 Stocks
     sp500_dataFrame = pd.read_csv('sp500_symbols.csv')
     sp500_symbols = sp500_dataFrame['Symbol'].tolist()
-
+    valid_stock = False
     # Handle form submission to generate stock stats
     stock_stats = None 
     if request.method == 'POST':
-        stock_selected = request.form.get('stock_symbol')
+        stock_selected = request.form.get('symbolInput')
         if stock_selected:
             # Calculate Stock Statistics
             stock_stats = calculate_stock_stats(stock_selected)
@@ -143,8 +143,10 @@ def dashboard():
                 'Sortino Ratio': 'Placeholder',
                 'Tracking Error': 'Placeholder',
             }
+            if stock_selected in sp500_symbols:
+                valid_stock = True
 
-    return render_template('dashboard.html', user=user, sp500_symbols=sp500_symbols, stock_stats=stock_stats)
+    return render_template('dashboard.html', user=user, sp500_symbols=sp500_symbols, stock_stats=stock_stats, valid_stock=valid_stock)
 
 # Tests Mongo_db connection, used for debugging
 @app.route("/mongo_test")
