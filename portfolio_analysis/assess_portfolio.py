@@ -1,9 +1,11 @@
 import pandas as pd
 import numpy as np
 import datetime as dt
+import matplotlib
 import matplotlib.pyplot as plt
 import math
 import os
+matplotlib.use('Agg')  # Set non-interactive backend
 
 def get_data(symbols, dates, path="data"):
     df_final = pd.DataFrame(index=dates)
@@ -50,3 +52,37 @@ def get_portfolio_returns(prices, allocations, start_val=10000):
     total_portfolio = pd.concat(portfolio_by_symbol.values(), axis=1)
     total_portfolio = total_portfolio.sum(axis=1)
     return total_portfolio
+
+def plot_user_portfolio(username):
+    title = "Normalized Prices"
+    xlabel = "Date"
+    ylabel = "Normalized Price"
+    
+    directory = 'user_portfolios'
+    filename = f"{username}_portfolio.csv"
+    file_path = f"{directory}/{filename}"
+
+    df = pd.read_csv(file_path)
+
+    df['Date'] = pd.to_datetime(df['Date'])
+    df.set_index('Date', inplace=True)
+
+    print("This is in plot_user_portfolio")
+    print(df.head())
+
+    df['Portfolio_normalized'] = df['Portfolio'] / df['Portfolio'].iloc[0]
+    plt.figure(figsize=(12, 6))
+    df['Portfolio_normalized'].plot(title=title, label='Portfolio')
+    # df['SPY_normalized'].plot(label='SPY')
+    plt.xlabel(xlabel)
+    plt.ylabel(ylabel)
+    plt.legend()
+    plt.grid(True)
+    # plt.show()
+
+    image_directory = 'user_portfolio_graphs'
+    image_path = image_path = f"{image_directory}/{username}_portfolio_graph.png"
+    plt.savefig(image_path)
+    plt.close()
+    plt.close()  # Close the plot to avoid displaying it
+    # print(f"Plot saved to {image_path}")

@@ -1,4 +1,4 @@
-from flask import Flask, request, redirect, url_for, render_template, session, flash
+from flask import Flask, request, redirect, url_for, render_template, session, flash, send_from_directory
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
 import os
@@ -27,6 +27,8 @@ try:
     print("Pinged your deployment. You successfully connected to MongoDB!")
 except Exception as e:
     print(e)
+
+GRAPH_DIR = 'user_portfolio_graphs'
 
 
 # Base Route
@@ -195,7 +197,47 @@ def user_data_test():
     filename = f"{session['username']}_portfolio.csv"
     file_path = os.path.join(directory, filename)
 
+    print(f"The type of port_val: {type(port_val)}")
+
     # port_val.to_csv(file_path, index=True)
-    port_val.to_csv(file_path, index=False)
+    # port_val.to_csv(file_path, index=True)
+
+    port_val_df = port_val.reset_index()
+    port_val_df.columns = ['Date', 'Portfolio']
+    port_val_df.to_csv(file_path, index=False)
 
     return "<p>This should have created a dataframe and printed it in the console.</p>"
+
+@app.route("/visualization_test")
+def visualization_test():
+    username = session.get('username')
+    print(f"The user is: {username}")
+    print("Now, running plot user portfolio:")
+    plot_user_portfolio(username)
+
+
+    return "<p>This should have created a graph of the user's portfolio.</p>"
+
+# @app.route('/display_portfolio/<username>')
+# def display_portfolio(username):
+@app.route('/display_portfolio')
+def display_portfolio():
+    username = session.get('username')
+    # Construct the image filename based on the username
+    image_filename = f"{username}_portfolio_graph.png"
+
+    # Check if the image exists before serving
+    image_path = os.path.join(GRAPH_DIR, image_filename)
+    if os.path.exists(image_path):
+        return render_template('display_image.html', username=username)
+    else:
+        return f"Image for {username} not found.", 404
+    
+@app.route('/portfolio_image')
+def serve_image():
+    username = session.get('username')
+    # Construct the image filename
+    image_filename = f"{username}_portfolio_graph.png"
+
+    # Serve the image from the user portfolio directory
+    return send_from_directory(GRAPH_DIR, image_filename)
