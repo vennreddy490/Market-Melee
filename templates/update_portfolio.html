@@ -1,7 +1,18 @@
-<!doctype html>
-<html>
-<head>
-    <title>Update Portfolio</title>
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Update Your Portfolio</h1>
+    <form action="" method="post">
+        Portfolio Value: <input type="number" name="portfolio_value" required><br><br>
+        <div id="stock-fields">
+            {% for i in range(1, 6) %}
+                Stock {{ i }}: <input type="text" name="stock_{{ i }}" required>
+                Allocation {{ i }}: <input type="number" name="allocation_{{ i }}" step="any" required><br>
+            {% endfor %}
+        </div>
+        <button type="button" onclick="addFields()">Add More Stocks</button><br><br>
+        <input type="submit" value="Update Portfolio">
+    </form>
     <script>
         let fieldCount = 5;  // Start with 5 fields
         const maxFields = 10;  // Maximum number of fields
@@ -40,19 +51,4 @@
             container.appendChild(br);
         }
     </script>
-</head>
-<body>
-    <h1>Update Your Portfolio</h1>
-    <form action="" method="post">
-        Portfolio Value: <input type="number" name="portfolio_value" required><br><br>
-        <div id="stock-fields">
-            {% for i in range(1, 6) %}
-                Stock {{ i }}: <input type="text" name="stock_{{ i }}" required>
-                Allocation {{ i }}: <input type="number" name="allocation_{{ i }}" step="any" required><br>
-            {% endfor %}
-        </div>
-        <button type="button" onclick="addFields()">Add More Stocks</button><br><br>
-        <input type="submit" value="Update Portfolio">
-    </form>
-</body>
-</html>
+{% endblock %}
