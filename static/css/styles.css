@@ -1,4 +1,23 @@
+body {
+    background-color: #D6EFD8;
+}
 nav img {
     width: 120px;
     height: 120px;
+}
+
+.authModal {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 80vh;
+    width: 60vw;
+    margin-top: 20px;
+    border-radius: 20px;
+    background-color: #80AF81;
+}
+
+.authModal h1 {
+    padding-bottom: 40px;
 }

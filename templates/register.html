@@ -1,15 +1,18 @@
 {% extends "base.html" %}
-<!doctype html>
-<html>
-<head>
-    <title>Register</title>
-</head>
-<body>
+
+{% block content %}
+<div class="container authModal">
     <h1>Register</h1>
     <form action="" method="post">
-        Username: <input type="text" name="username" required><br>
-        Password: <input type="password" name="password" required><br>
-        <input type="submit" value="Register">
+        <div class="mb-3">
+            <label class="form-label">Username:</label>
+            <input class="form-control"type="text" name="username" required><br>
+        </div>
+        <div class="mb-3">
+            <label class="form label">Password:</label>
+            <input class="form-control" type="password" name="password" required><br>
+        </div>
+        <input class="btn btn-primary" type="submit" value="Register" style="text-align: center;">
     </form>
-</body>
-</html>
+</div>
+{% endblock %}
