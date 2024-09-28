@@ -212,9 +212,9 @@ def user_data_test():
 def visualization_test():
     username = session.get('username')
     print(f"The user is: {username}")
-    print("Now, running plot user portfolio:")
+    print("DEBUG TEST 1: CALLING PLOT USER PORTFOLIO")
     plot_user_portfolio(username)
-
+    print("DEBUG TEST 2: AFTER CALLING PLOT USER PORTFOLIO")
 
     return "<p>This should have created a graph of the user's portfolio.</p>"
 

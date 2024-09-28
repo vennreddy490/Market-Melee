@@ -3,6 +3,8 @@ import numpy as np
 import datetime as dt
 import matplotlib
 import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
+from matplotlib.ticker import MaxNLocator
 import math
 import os
 matplotlib.use('Agg')  # Set non-interactive backend
@@ -54,35 +56,58 @@ def get_portfolio_returns(prices, allocations, start_val=10000):
     return total_portfolio
 
 def plot_user_portfolio(username):
-    title = "Normalized Prices"
+    # Set up titles and labels
+    title = f"{username}'s Portfolio Performance Over Time"
     xlabel = "Date"
-    ylabel = "Normalized Price"
+    ylabel = "Normalized Portfolio Value"
     
+    # Define file paths
     directory = 'user_portfolios'
     filename = f"{username}_portfolio.csv"
     file_path = f"{directory}/{filename}"
 
+    # Read the portfolio CSV file
     df = pd.read_csv(file_path)
 
+    # Convert 'Date' column to datetime and set as index
     df['Date'] = pd.to_datetime(df['Date'])
     df.set_index('Date', inplace=True)
 
-    print("This is in plot_user_portfolio")
-    print(df.head())
-
+    # Normalize the portfolio values
     df['Portfolio_normalized'] = df['Portfolio'] / df['Portfolio'].iloc[0]
-    plt.figure(figsize=(12, 6))
-    df['Portfolio_normalized'].plot(title=title, label='Portfolio')
-    # df['SPY_normalized'].plot(label='SPY')
-    plt.xlabel(xlabel)
-    plt.ylabel(ylabel)
-    plt.legend()
-    plt.grid(True)
-    # plt.show()
 
+    # Set the plot style
+    plt.style.use('seaborn')
+
+    # Create a figure and axis object
+    plt.figure(figsize=(12, 6))
+
+    # Plot the normalized portfolio
+    df['Portfolio_normalized'].plot(color='#1f77b4', linewidth=2, label='Portfolio')
+
+    # Set title and labels with increased font sizes
+    plt.title(title, fontsize=16)
+    plt.xlabel(xlabel, fontsize=12)
+    plt.ylabel(ylabel, fontsize=12)
+
+    # Format the x-axis dates
+    plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%b-%d'))
+    plt.gca().xaxis.set_major_locator(mdates.WeekdayLocator(interval=1))
+    plt.xticks(rotation=45)  # Rotate date labels for better fit
+
+    # Customize the legend
+    plt.legend(loc='upper left', fontsize=12)
+
+    # Add gridlines
+    plt.grid(True, which='both', linestyle='--', linewidth=0.5)
+
+    # Adjust layout
+    plt.tight_layout()
+
+    # Save the plot to a file
     image_directory = 'user_portfolio_graphs'
-    image_path = image_path = f"{image_directory}/{username}_portfolio_graph.png"
+    if not os.path.exists(image_directory):
+        os.makedirs(image_directory)
+    image_path = f"{image_directory}/{username}_portfolio_graph.png"
     plt.savefig(image_path)
     plt.close()
-    plt.close()  # Close the plot to avoid displaying it
-    # print(f"Plot saved to {image_path}")
