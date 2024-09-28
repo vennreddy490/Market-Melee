@@ -50,3 +50,6 @@ def get_portfolio_returns(prices, allocations, start_val=10000):
     total_portfolio = pd.concat(portfolio_by_symbol.values(), axis=1)
     total_portfolio = total_portfolio.sum(axis=1)
     return total_portfolio
+
+def calculate_stock_stats():
+    return 1

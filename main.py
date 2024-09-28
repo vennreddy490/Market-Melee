@@ -5,6 +5,7 @@ import os
 from flask_bcrypt import Bcrypt
 from dotenv import load_dotenv
 from portfolio_analysis.assess_portfolio import *
+import pandas as pd
 
 load_dotenv()
 
@@ -114,13 +115,36 @@ def update_portfolio():
     return render_template('update_portfolio.html')
 
 
-# Dashboard Route (To be implemented later)
-@app.route("/dashboard")
+# Dashboard Route
+@app.route("/dashboard", methods=['GET', 'POST'])
 def dashboard():
     username = session['username']
     # Fetch user data
     user = test_collection.find_one({'user': username})
-    return render_template('dashboard.html', user=user)
+
+    # Generate list of S&P 500 Stocks
+    sp500_dataFrame = pd.read_csv('sp500_symbols.csv')
+    sp500_symbols = sp500_dataFrame['Symbol'].tolist()
+
+    # Handle form submission to generate stock stats
+    stock_stats = None 
+    if request.method == 'POST':
+        stock_selected = request.form.get('stock_symbol')
+        if stock_selected:
+            # Calculate Stock Statistics
+            stock_stats = calculate_stock_stats(stock_selected)
+
+            # PlaceHolder
+            stock_stats = {
+                'Daily Returns': 'Placeholder',
+                'Cumulative Returns': 'Placeholder',
+                'Volatility': 'Placeholder',
+                'Sharpe Ratio': 'Placeholder',
+                'Sortino Ratio': 'Placeholder',
+                'Tracking Error': 'Placeholder',
+            }
+
+    return render_template('dashboard.html', user=user, sp500_symbols=sp500_symbols, stock_stats=stock_stats)
 
 # Tests Mongo_db connection, used for debugging
 @app.route("/mongo_test")
