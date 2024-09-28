@@ -37,7 +37,7 @@ def hello_world():
 
 @app.route("/welcome")
 def welcome():
-    return "<p>WELCOME PAGE HERE</p>"
+    return render_template('welcome.html')
 
 # Registers new user, adds them to MongoDB users 
 @app.route("/register", methods=['GET', 'POST'])
