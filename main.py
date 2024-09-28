@@ -31,7 +31,12 @@ except Exception as e:
 # Base Route
 @app.route("/")
 def hello_world():
-    return "<p>Hello, World!</p>"
+    # If not logged in, route to welcome, else render dashboard 
+    return redirect(url_for('welcome'))
+
+@app.route("/welcome")
+def welcome():
+    return "<p>WELCOME PAGE HERE</p>"
 
 # Registers new user, adds them to MongoDB users 
 @app.route("/register", methods=['GET', 'POST'])
