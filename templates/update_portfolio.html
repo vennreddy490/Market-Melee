@@ -2,14 +2,57 @@
 <html>
 <head>
     <title>Update Portfolio</title>
+    <script>
+        let fieldCount = 5;  // Start with 5 fields
+        const maxFields = 10;  // Maximum number of fields
+
+        function addFields() {
+            if (fieldCount >= maxFields) {
+                alert("You can only add up to 10 stocks.");
+                return;
+            }
+            fieldCount++;
+
+            const container = document.getElementById('stock-fields');
+
+            const stockLabel = document.createElement('label');
+            stockLabel.innerHTML = `Stock ${fieldCount}: `;
+            container.appendChild(stockLabel);
+
+            const stockInput = document.createElement('input');
+            stockInput.type = 'text';
+            stockInput.name = `stock_${fieldCount}`;
+            stockInput.required = true;
+            container.appendChild(stockInput);
+
+            const allocationLabel = document.createElement('label');
+            allocationLabel.innerHTML = ` Allocation ${fieldCount}: `;
+            container.appendChild(allocationLabel);
+
+            const allocationInput = document.createElement('input');
+            allocationInput.type = 'number';
+            allocationInput.name = `allocation_${fieldCount}`;
+            allocationInput.step = 'any';
+            allocationInput.required = true;
+            container.appendChild(allocationInput);
+
+            const br = document.createElement('br');
+            container.appendChild(br);
+        }
+    </script>
 </head>
 <body>
     <h1>Update Your Portfolio</h1>
     <form action="" method="post">
-        Portfolio Value: <input type="number" name="portfolio_value" required><br>
-        Stocks (comma-separated): <input type="text" name="stocks" required><br>
-        Allocations (comma-separated percentages): <input type="text" name="allocations" required><br>
-        <input type="submit" value="Update">
+        Portfolio Value: <input type="number" name="portfolio_value" required><br><br>
+        <div id="stock-fields">
+            {% for i in range(1, 6) %}
+                Stock {{ i }}: <input type="text" name="stock_{{ i }}" required>
+                Allocation {{ i }}: <input type="number" name="allocation_{{ i }}" step="any" required><br>
+            {% endfor %}
+        </div>
+        <button type="button" onclick="addFields()">Add More Stocks</button><br><br>
+        <input type="submit" value="Update Portfolio">
     </form>
 </body>
 </html>

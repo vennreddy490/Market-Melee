@@ -76,10 +76,24 @@ def login():
 def update_portfolio():
     if request.method == 'POST':
         username = session['username']
-        # Collect form data
-        collection_of_stocks = request.form.getlist('stocks')
-        allocations = request.form.getlist('allocations')
         portfolio_value = int(request.form['portfolio_value'])
+        
+        # Collect form data
+        collection_of_stocks = []
+        allocations = []
+
+        # Iterate over number of fields, since we don't know total amt 
+        for i in range(1, 11):
+            stock = request.form.get(f'stock_{i}')
+            allocation = request.form.get(f'allocation_{i}')
+            if stock and allocation:
+                collection_of_stocks.append(stock)
+                allocations.append(float(allocation))
+
+        # Make sure that allocations sum up to 100%
+        total_allocation = sum(allocations)
+        if total_allocation != 100.0:
+            return 'Allocations must sum up to 100%.'
 
         # Update the user data in MongoDB
         test_collection.update_one(
