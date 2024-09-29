@@ -78,4 +78,18 @@ nav img {
     display: flex;
     flex-direction: column;
     align-items: center;
+    padding: 20px;
+}
+
+.updateRow {
+    align-items: center;
+}
+
+.updateRow label {
+    margin-right: 5px;
+}
+
+.updateRow .form-control {
+    margin-left: 0;
+    padding: 5px;
 }
