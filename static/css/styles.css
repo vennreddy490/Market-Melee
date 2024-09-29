@@ -73,3 +73,9 @@ nav img {
     margin-top: 30px;
     justify-content: center;
 }
+
+.update-port-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
