@@ -180,8 +180,8 @@ def mongo_test():
 
     return "<p>This should have added a user.</p>"
 
-@app.route("/user_data_test")
-def user_data_test():
+@app.route("/league")
+def league():
     username = session.get('username')
     user_data = test_collection.find_one({'user': username})
 
@@ -234,7 +234,7 @@ def user_data_test():
     # Check if the image exists before serving
     image_static_path = 'static/' + image_filename
     if os.path.exists(image_static_path):
-        return render_template('display_image.html', username=username, portfolio_image_path=image_filename)
+        return render_template('league.html', username=username, portfolio_image_path=image_filename)
     else:
         return f"Image for {username} not found.", 404
     
