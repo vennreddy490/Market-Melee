@@ -306,5 +306,6 @@ def serve_image():
 def logout():
     # Clear the user session
     session.pop('username', None)
+    # session.clear()
     # Redirect to the welcome page
     return redirect(url_for('welcome'))
