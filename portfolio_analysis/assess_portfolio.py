@@ -57,21 +57,6 @@ def get_portfolio_returns(prices, allocations, start_val=10000):
     return total_portfolio
 
 def plot_user_portfolio(username):
-    print('DEBUG')
-    print('DEBUG')
-    print('DEBUG')
-    print('DEBUG')
-    print('DEBUG')
-    print('DEBUG')
-    print(plt.style.available)  # Check if seaborn styles are listed
-    print('DEBUG')
-    print('DEBUG')
-    print('DEBUG')
-    print('DEBUG')
-    print('DEBUG')
-    print('DEBUG')
-    print('DEBUG')
-
     # Set up titles and labels
     title = f"{username}'s Portfolio Performance Over Time"
     xlabel = "Date"
@@ -128,6 +113,35 @@ def plot_user_portfolio(username):
     plt.savefig(image_path)
     plt.close()
 
+def plot_solo_stock(symbol):
+    # Set up titles and labels
+    title = f"{symbol}'s Historical Performance"
+    xlabel = "Date"
+    ylabel = "Stock Value"
+    
+    # Define file paths
+    file_path = f'data/{symbol}.csv'
+
+    # Read the stock CSV, only keeps the Date and Adj Close cols
+    df = pd.read_csv(file_path, usecols=["Date", "Adj Close"])
+
+    # Convert 'Date' column to datetime and set as index
+    df['Date'] = pd.to_datetime(df['Date'])
+    df.set_index('Date', inplace=True)
+
+    # Plot the 'Adj Close' prices
+    plt.figure(figsize=(10,6))
+    df['Adj Close'].plot(title=title, xlabel=xlabel, ylabel=ylabel)
+    plt.grid(True)
+
+    # Save the plot to a file
+    image_directory = 'stock_graphs'
+    if not os.path.exists(image_directory):
+        os.makedirs(image_directory)
+    image_path = f"{image_directory}/{symbol}_returns.png"
+    plt.savefig(image_path)
+    plt.close()
+    print(f"Graphed and saved stock graph of {symbol}.")
 
 def calculate_stock_stats():
     return 1

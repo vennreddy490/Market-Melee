@@ -240,3 +240,8 @@ def serve_image():
     # Serve the image from the user portfolio directory
     return send_from_directory(GRAPH_DIR, image_filename)
 
+@app.route('/apple')
+def apple():
+    print("attempting to read and plot apple stock")
+    plot_solo_stock('AAPL')
+    return "<p>This should have graphed apple stock.</p>"
