@@ -37,13 +37,13 @@
             <div class="col-md-6 stock-stats">
                 <h1>Stock Stats</h1>
                 <h5>Select a Stock to Learn More!</h5>
-                <form>
+                <form action="" method="post">
                     <div class="form-group row align-items-center checkStats">
                     
                         <label class="col-auto col-form-label"for="symbolInput">Symbol</label>
                         <div class="col-auto">
                             <input type="text" class="form-control" list="symbolList" 
-                                id="symbolInput" placeholder="Enter a Symbol:">
+                                id="symbolInput" name="symbol" placeholder="Enter a Symbol:">
                                 <datalist id="symbolList">
                                     {% for symbol in sp500_symbols %}
                                         <option value="{{ symbol }}"></option>
@@ -56,15 +56,23 @@
                     </div>
                 </form>
                 {% if valid_stock %}
-                    <p>sfsddf</p>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <h6>Daily Returns: {{ stock_stats['Daily Returns'] }}</h6>
-                        </div>
-                        <div class="col-md-6">
-
-                        </div>
+                <h2>Stock Information for {{ stock_stats['stock_name'] }}</h2>
+                <div class="row">
+                    <div class="col-md-6">
+                        <p><strong>Cumulative Return:</strong> {{ stock_stats['Cumulative Return'] }}</p>
+                        <p><strong>Average Daily Return:</strong> {{ stock_stats['Average Daily Return'] }}</p>
+                        <p><strong>Volatility (Standard Deviation):</strong> {{ stock_stats['Volatility (Standard Deviation)'] }}</p>
+                        <p><strong>Sharpe Ratio:</strong> {{ stock_stats['Sharpe Ratio'] }}</p>
+                        <p><strong>Sortino Ratio:</strong> {{ stock_stats['Sortino Ratio'] }}</p>
                     </div>
+                    <div class="col-md-6">
+                        {% if stock_image %}
+                            <img src="{{ url_for('static', filename=stock_image) }}" alt="Stock Graph" class="img-fluid">
+                        {% else %}
+                            <p>Graph not available.</p>
+                        {% endif %}
+                    </div>
+                </div>
                 {% endif %}
             </div>
             <script>

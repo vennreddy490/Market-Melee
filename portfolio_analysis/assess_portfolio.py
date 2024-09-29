@@ -142,6 +142,3 @@ def plot_solo_stock(symbol):
     plt.savefig(image_path)
     plt.close()
     print(f"Graphed and saved stock graph of {symbol}.")
-
-def calculate_stock_stats():
-    return 1

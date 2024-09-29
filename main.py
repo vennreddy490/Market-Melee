@@ -20,7 +20,7 @@ uri = os.environ.get('MONGO_URI')
 client = MongoClient(uri, server_api=ServerApi('1'))
 db = client['sample_mflix']
 test_collection = db['test_users']
-
+stock_metrics_collection = db['stock_metrics']
 
 # Test MongoDB connection
 try:
@@ -128,27 +128,36 @@ def dashboard():
     sp500_dataFrame = pd.read_csv('sp500_symbols.csv')
     sp500_symbols = sp500_dataFrame['Symbol'].tolist()
     valid_stock = False
+    # Information for Stock Stats
+    stock_image = None
+    stock_stats = None
+
     # Handle form submission to generate stock stats
     stock_stats = None 
     if request.method == 'POST':
-        stock_selected = request.form.get('symbolInput')
-        if stock_selected:
-            # Calculate Stock Statistics
-            stock_stats = calculate_stock_stats(stock_selected)
+        stock_selected = request.form['symbol'].upper()
+        print(stock_selected)
+        if stock_selected in sp500_symbols:
+            valid_stock = True
 
-            # PlaceHolder
-            stock_stats = {
-                'Daily Returns': 'Placeholder',
-                'Cumulative Returns': 'Placeholder',
-                'Volatility': 'Placeholder',
-                'Sharpe Ratio': 'Placeholder',
-                'Sortino Ratio': 'Placeholder',
-                'Tracking Error': 'Placeholder',
-            }
-            if stock_selected in sp500_symbols:
-                valid_stock = True
+            # Retrieve Stock Data from MongoDB
+            stock_data = stock_metrics_collection.find_one({'stock_name': stock_selected})
 
-    return render_template('dashboard.html', user=user, sp500_symbols=sp500_symbols, stock_stats=stock_stats, valid_stock=valid_stock)
+            if stock_data:
+                stock_data.pop('id', None)
+                stock_stats = stock_data
+
+                # Get Graph Plot
+                plot_solo_stock(stock_selected)
+                image_path = f"{stock_selected}_returns.png"
+                stock_image = f'stock_graphs/{image_path}'
+            else:
+                flash(f"Data for {stock_selected} not found in database.")
+        else:
+            flash(f"{stock_selected} is not in the S&P 500")
+                
+
+    return render_template('dashboard.html', user=user, sp500_symbols=sp500_symbols, stock_stats=stock_stats, valid_stock=valid_stock, stock_image=stock_image)
 
 # Tests Mongo_db connection, used for debugging
 @app.route("/mongo_test")
