@@ -110,3 +110,11 @@ nav img {
     flex-direction: column;
     justify-content: space-around;
 }
+
+.league-section {
+    margin-top: 50px;
+}
+
+.leaders {
+    text-align: center;
+}
