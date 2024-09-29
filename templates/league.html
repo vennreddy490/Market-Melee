@@ -4,44 +4,48 @@
     <div style="text-align: center;">
         <h1>Portfolios of the Week: </h1>
         <div class="row league-section">
-            <div class="col-md-4 d-flex flex-column justify-content-start">
+            <!-- Left column for the Leaders and Cards -->
+            <div class="col-md-4 d-flex flex-column align-items-center">
                 <h3 class="ml-3 mt-1"><u>Leaders</u></h3>
-                <div class="card w-100 ml-5">
+                {% for username, details in top_weekly.items() %}
+                <div class="card w-75 ml-3 rounded mb-3">
                     <div class="card-body pl-1">
-                      <h5 class="card-title ml-0">User: jjj</h5>
-                      <p class="card-text ">Portfolio Value: xyz</p>
+                        <h5 class="card-title ml-0">User: {{ username }}</h5>
+                        <p class="card-text">Portfolio Value: {{ details['normalized_return'] | round(3) }}</p>
                     </div>
-                  </div>
+                </div>
+                {% endfor %}
             </div>
-            <div class="col-md-8">
-                <img src="{{ url_for('static', filename=weekly_image) }}" alt="{{ username }}'s Portfolio Graph" style="float: right; margin-right: 20px; width: 70%">
+            <!-- Right column for the image -->
+            <div class="col-md-8 d-flex justify-content-center align-items-start">
+                <img src="{{ url_for('static', filename=weekly_image) }}" alt="{{ username }}'s Portfolio Graph" style="float: right; width: 70%;">
             </div>
-    </div>
+        </div>
     </div>
     <hr class="line">
     <div style="text-align: center;">
         <h1>Best Historical Return Potfolios: </h1>
         <div class="row league-section">
-            <div class="col-md-4 d-flex flex-column">
+            <div class="col-md-4 d-flex flex-column align-items-center">
                 <h3 class="ml-3 mt-1"><u>Leaders</u></h3>
-    
+                {% for username, details in top_historical.items() %}
+                <div class="card w-75 ml-3 rounded mb-3">
+                    <div class="card-body pl-1">
+                        <h5 class="card-title ml-0">User: {{ username }}</h5>
+                        <p class="card-text">Portfolio Value: {{ details['normalized_return'] | round(3) }}</p>
+                    </div>
+                </div>
+                {% endfor %}
             </div>
-            <div class="col-md-8">
-                <img src="{{ url_for('static', filename=historical_image) }}" alt="{{ username }}'s Portfolio Graph" style="float: right; margin-right: 20px; width: 70%">
+            <div class="col-md-8 d-flex justify-content-center align-items-start">
+                <img src="{{ url_for('static', filename=historical_image) }}" alt="{{ username }}'s Portfolio Graph" style="float: right; width: 70%">
             </div>
         </div>
     </div>
     <hr class="line">
     <div style="text-align: center">
-        <h1>User's Portfolio vs. Market </h1>
-        <div class="row league-section">
-            <div class="col-md-4 d-flex flex-column">
-                <h3 class="ml-3 mt-1"><u>Leaders</u></h3>
-            </div>
-            <div class="col-md-8">
-                <img src="{{ url_for('static', filename=personal_image) }}" alt="{{ username }}'s Portfolio Graph" style="float: right; margin-right: 20px; width: 70%">
-            </div>
-        </div>
+        <h1 style="margin-top: 20px;">User's Portfolio vs. Market </h1>
+            <img src="{{ url_for('static', filename=personal_image) }}" alt="{{ username }}'s Portfolio Graph" style="width: 50%; margin-bottom: 30px;">
     </div>
 
     <!-- Other HTML content can go here -->
