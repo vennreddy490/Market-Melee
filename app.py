@@ -5,6 +5,7 @@ import os
 from flask_bcrypt import Bcrypt
 from dotenv import load_dotenv
 from portfolio_analysis.assess_portfolio import *
+import pandas as pd
 
 load_dotenv()
 
@@ -116,13 +117,38 @@ def update_portfolio():
     return render_template('update_portfolio.html')
 
 
-# Dashboard Route (To be implemented later)
-@app.route("/dashboard")
+# Dashboard Route
+@app.route("/dashboard", methods=['GET', 'POST'])
 def dashboard():
     username = session['username']
     # Fetch user data
     user = test_collection.find_one({'user': username})
-    return render_template('dashboard.html', user=user)
+
+    # Generate list of S&P 500 Stocks
+    sp500_dataFrame = pd.read_csv('sp500_symbols.csv')
+    sp500_symbols = sp500_dataFrame['Symbol'].tolist()
+    valid_stock = False
+    # Handle form submission to generate stock stats
+    stock_stats = None 
+    if request.method == 'POST':
+        stock_selected = request.form.get('symbolInput')
+        if stock_selected:
+            # Calculate Stock Statistics
+            stock_stats = calculate_stock_stats(stock_selected)
+
+            # PlaceHolder
+            stock_stats = {
+                'Daily Returns': 'Placeholder',
+                'Cumulative Returns': 'Placeholder',
+                'Volatility': 'Placeholder',
+                'Sharpe Ratio': 'Placeholder',
+                'Sortino Ratio': 'Placeholder',
+                'Tracking Error': 'Placeholder',
+            }
+            if stock_selected in sp500_symbols:
+                valid_stock = True
+
+    return render_template('dashboard.html', user=user, sp500_symbols=sp500_symbols, stock_stats=stock_stats, valid_stock=valid_stock)
 
 # Tests Mongo_db connection, used for debugging
 @app.route("/mongo_test")
@@ -144,22 +170,6 @@ def mongo_test():
         print(e)
 
     return "<p>This should have added a user.</p>"
-
-@app.route("/backend_test")
-def backend_test():
-    dates = pd.date_range('2024-08-01', '2024-09-27')
-    symbols = ['GOOG', 'AAPL', 'XOM']
-    df_prices = get_data(symbols, dates)
-    print("Data:")
-    print(df_prices.head())
-
-    allocs = [0.4, 0.3, 0.3]
-    sv = 10000
-
-    port_val = get_portfolio_returns(df_prices, allocs, sv)
-    print(f"\nget_portfolio_returns() returns: \n{port_val.head(10)}")
-
-    return "<p>This should have created a dataframe and printed it in the console.</p>"
 
 @app.route("/user_data_test")
 def user_data_test():
@@ -220,31 +230,6 @@ def user_data_test():
         return f"Image for {username} not found.", 404
 
     return "<p>This should have created a dataframe and printed it in the console.</p>"
-
-# @app.route("/visualization_test")
-# def visualization_test():
-#     username = session.get('username')
-#     print(f"The user is: {username}")
-#     print("DEBUG TEST 1: CALLING PLOT USER PORTFOLIO")
-#     plot_user_portfolio(username)
-#     print("DEBUG TEST 2: AFTER CALLING PLOT USER PORTFOLIO")
-
-#     return "<p>This should have created a graph of the user's portfolio.</p>"
-
-# # @app.route('/display_portfolio/<username>')
-# # def display_portfolio(username):
-# @app.route('/display_portfolio')
-# def display_portfolio():
-#     username = session.get('username')
-#     # Construct the image filename based on the username
-#     image_filename = f"{username}_portfolio_graph.png"
-
-#     # Check if the image exists before serving
-#     image_path = os.path.join(GRAPH_DIR, image_filename)
-#     if os.path.exists(image_path):
-#         return render_template('display_image.html', username=username)
-#     else:
-#         return f"Image for {username} not found.", 404
     
 @app.route('/portfolio_image')
 def serve_image():
@@ -254,3 +239,4 @@ def serve_image():
 
     # Serve the image from the user portfolio directory
     return send_from_directory(GRAPH_DIR, image_filename)
+

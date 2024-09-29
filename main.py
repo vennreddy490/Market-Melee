@@ -1,4 +1,4 @@
-from flask import Flask, request, redirect, url_for, render_template, session, flash
+from flask import Flask, request, redirect, url_for, render_template, session, flash, send_from_directory
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
 import os
@@ -28,6 +28,8 @@ try:
     print("Pinged your deployment. You successfully connected to MongoDB!")
 except Exception as e:
     print(e)
+
+GRAPH_DIR = 'user_portfolio_graphs'
 
 
 # Base Route
@@ -169,22 +171,6 @@ def mongo_test():
 
     return "<p>This should have added a user.</p>"
 
-@app.route("/backend_test")
-def backend_test():
-    dates = pd.date_range('2024-08-01', '2024-09-27')
-    symbols = ['GOOG', 'AAPL', 'XOM']
-    df_prices = get_data(symbols, dates)
-    print("Data:")
-    print(df_prices.head())
-
-    allocs = [0.4, 0.3, 0.3]
-    sv = 10000
-
-    port_val = get_portfolio_returns(df_prices, allocs, sv)
-    print(f"\nget_portfolio_returns() returns: \n{port_val.head(10)}")
-
-    return "<p>This should have created a dataframe and printed it in the console.</p>"
-
 @app.route("/user_data_test")
 def user_data_test():
     username = session.get('username')
@@ -216,4 +202,41 @@ def user_data_test():
     port_val = get_portfolio_returns(df_prices, allocs, sv)
     print(f"\nget_portfolio_returns() returns: \n{port_val.head(10)}")
 
+    directory = 'user_portfolios'
+    
+    filename = f"{session['username']}_portfolio.csv"
+    file_path = os.path.join(directory, filename)
+
+    print(f"The type of port_val: {type(port_val)}")
+
+    # port_val.to_csv(file_path, index=True)
+    # port_val.to_csv(file_path, index=True)
+
+    port_val_df = port_val.reset_index()
+    port_val_df.columns = ['Date', 'Portfolio']
+    port_val_df.to_csv(file_path, index=False)
+
+    # Plot the user portfolio and save the image
+    plot_user_portfolio(username)
+
+    # Serve the image and display it to the frontend
+    image_filename = f"{username}_portfolio_graph.png"
+
+    # Check if the image exists before serving
+    image_path = os.path.join(GRAPH_DIR, image_filename)
+    if os.path.exists(image_path):
+        return render_template('display_image.html', username=username)
+    else:
+        return f"Image for {username} not found.", 404
+
     return "<p>This should have created a dataframe and printed it in the console.</p>"
+    
+@app.route('/portfolio_image')
+def serve_image():
+    username = session.get('username')
+    # Construct the image filename
+    image_filename = f"{username}_portfolio_graph.png"
+
+    # Serve the image from the user portfolio directory
+    return send_from_directory(GRAPH_DIR, image_filename)
+
