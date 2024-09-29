@@ -10,5 +10,7 @@ user_portfolios/
 
 static/temp_graphs/
 
+static/temp_graphs_weekly
+
 .env
 
