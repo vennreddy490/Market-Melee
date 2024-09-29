@@ -93,3 +93,20 @@ nav img {
     margin-left: 0;
     padding: 5px;
 }
+
+.stock-information {
+    padding-top: 30px;
+    text-align: start;
+}
+
+.tips {
+    display: flex;
+    flex-direction: column;
+    padding-top: 75px;
+}
+
+.stat-style {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}

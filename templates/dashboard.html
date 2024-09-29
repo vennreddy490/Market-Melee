@@ -4,7 +4,7 @@
     <div class="container-fluid dashboard">
         <div class="row flex-nowrap">
             <!--First Column-->
-            <div class="col-md-5 current-portfolio">
+            <div class="col-md-3 current-portfolio">
                 <h1>Welcome Back, {{ user['user'] }}!</h1>
                 <h2>Current Portfolio</h2>
                 <hr class="line">
@@ -22,7 +22,6 @@
                         {% endfor %}
                     </div>
                 </div>
-                <h3>Total Value:</h3>
                 <hr class="line">
                 <div class="d-flex justify-content-center mt-2 mb-4">
                     <button class="btn btn-secondary btn-lg w-50" onclick="{editPortfolio()}">Update Portfolio</button>
@@ -34,7 +33,7 @@
             </div>
 
             <!-- Third Column -->
-            <div class="col-md-6 stock-stats">
+            <div class="col-md-8 stock-stats">
                 <h1>Stock Stats</h1>
                 <h5>Select a Stock to Learn More!</h5>
                 <form action="" method="post">
@@ -56,18 +55,23 @@
                     </div>
                 </form>
                 {% if valid_stock %}
-                <h2>Stock Information for {{ stock_stats['stock_name'] }}</h2>
                 <div class="row">
-                    <div class="col-md-6">
-                        <p><strong>Cumulative Return:</strong> {{ stock_stats['Cumulative Return'] }}</p>
-                        <p><strong>Average Daily Return:</strong> {{ stock_stats['Average Daily Return'] }}</p>
-                        <p><strong>Volatility (Standard Deviation):</strong> {{ stock_stats['Volatility (Standard Deviation)'] }}</p>
-                        <p><strong>Sharpe Ratio:</strong> {{ stock_stats['Sharpe Ratio'] }}</p>
-                        <p><strong>Sortino Ratio:</strong> {{ stock_stats['Sortino Ratio'] }}</p>
+                    <div class="col-md-3 stat-style" style="text-align: left;">
+                        <div>
+                            <p><strong>Cumulative Return:</strong> {{ stock_stats['Cumulative Return'] }}</p>
+                            <p><strong>Avg. Daily Return:</strong> {{ stock_stats['Avg. Daily Return'] }}</p>
+                            <p><strong>Volatility (Std):</strong> {{ stock_stats['Volatility'] }}</p>
+                            <p><strong>Sharpe Ratio:</strong> {{ stock_stats['Sharpe Ratio'] }}</p>
+                            <p><strong>Sortino Ratio:</strong> {{ stock_stats['Sortino Ratio'] }}</p>
+                        </div>
+                        <div class="tips">
+                            <p class="fs-2"><strong>Want to learn what these mean?</strong></p>
+                            <p class="fs-2"><strong> Click on the stats for more!</strong></p>
+                        </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-9 graph-information">
                         {% if stock_image %}
-                            <img src="{{ url_for('static', filename=stock_image) }}" alt="Stock Graph" class="img-fluid">
+                            <img src="{{ url_for('static', filename=stock_image) }}" alt="Stock Graph" class="img-fluid" style="padding-right: 20px;">
                         {% else %}
                             <p>Graph not available.</p>
                         {% endif %}
