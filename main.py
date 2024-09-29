@@ -229,19 +229,18 @@ def user_data_test():
     plot_user_portfolio(username)
 
     # Serve the image and display it to the frontend
-    image_filename = f"{username}_portfolio_graph.png"
+    image_filename = f"user_portfolio_graphs/{username}_portfolio_graph.png"
 
     # Check if the image exists before serving
-    image_path = os.path.join(GRAPH_DIR, image_filename)
-    if os.path.exists(image_path):
-        return render_template('display_image.html', username=username)
+    image_static_path = 'static/' + image_filename
+    if os.path.exists(image_static_path):
+        return render_template('display_image.html', username=username, portfolio_image_path=image_filename)
     else:
         return f"Image for {username} not found.", 404
-
-    return "<p>This should have created a dataframe and printed it in the console.</p>"
     
 @app.route('/portfolio_image')
 def serve_image():
+    print("IF YOU SEE THIS DEBUG STATEMENT, /portfolio_image is being hit, when it should not be.")
     username = session.get('username')
     # Construct the image filename
     image_filename = f"{username}_portfolio_graph.png"

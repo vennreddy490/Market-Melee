@@ -106,12 +106,13 @@ def plot_user_portfolio(username):
     plt.tight_layout()
 
     # Save the plot to a file
-    image_directory = 'user_portfolio_graphs'
+    image_directory = 'static/user_portfolio_graphs'
     if not os.path.exists(image_directory):
         os.makedirs(image_directory)
     image_path = f"{image_directory}/{username}_portfolio_graph.png"
     plt.savefig(image_path)
     plt.close()
+    print(f"{username} Portfolio Graph saved in: {image_path}")
 
 def plot_solo_stock(symbol):
     # Set up titles and labels

@@ -14,7 +14,7 @@
         <h2>{{ username }}'s Portfolio</h2> <!-- You can keep this or remove it if not needed -->
 
         <!-- Display the portfolio image -->
-        <img src="{{ url_for('serve_image') }}" alt="{{ username }}'s Portfolio Graph">
+        <img src="{{ url_for('static', filename=portfolio_image_path) }}" alt="{{ username }}'s Portfolio Graph">
 
         <!-- You can add additional sections or information here -->
     </section>
