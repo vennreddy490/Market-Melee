@@ -9,17 +9,29 @@
         <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
         <!-- Global CSS-->
         <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+        <script>
+            function toLeague() {
+                window.location.href = 'league';
+            }
+            function toDashboard() {
+                window.location.href = 'dashboard';
+            }
+            function toWelcome() {
+                window.location.href = 'welcome';
+            }
+        </script>
 
     </head>
     <body>
         <nav class="navbar" style="background-color: #D6EFD8; border-bottom: 2px solid black;">
             <a class="navbar-brand h1" style="color: black">Market Melee</a>
             <div class="ml-auto d-flex align-items-center justify-content-end">
-                <img src="{{ url_for('static', filename='images/crown.png') }}" alt="Crown" class="img-fluid">
+                <img src="{{ url_for('static', filename='images/crown.png') }}" alt="Crown" class="img-fluid" style="margin-left: 100px;">
             </div>
             <div class="ml-auto">
-                <button class="btn btn primary mr-2" style="background-color: #80AF81">Test</button>
-                <button class="btn btn primary" style="background-color: #80AF81">Test2</button>
+                <button class="btn btn secondary mr-2" onclick="{toDashboard()}">Dashboard</button>
+                <button class="btn btn secondary mr-2" onclick="{toLeague()}">League Page</button>
+                <button class="btn btn secondary" onclick="{toWelcome()}">Logout</button>
             </div>
         </nav>
         <div>
