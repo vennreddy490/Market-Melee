@@ -3,16 +3,30 @@
 {% block content %}
     <div class="update-port-container">
         <h1>Update Your Portfolio</h1>
-        <form action="" method="post">
-            Portfolio Value: <input type="number" name="portfolio_value" required><br><br>
+        <form action="" method="post" class="updateForm">
+            Portfolio Value: <input class="form-control" type="number" name="portfolio_value" required><br><br>
             <div id="stock-fields">
                 {% for i in range(1, 6) %}
-                    Stock {{ i }}: <input type="text" name="stock_{{ i }}" required>
-                    Allocation {{ i }}: <input type="number" name="allocation_{{ i }}" step="any" required><br>
+                <div class="row mb-3 updateRow">
+                    <div class="col-md-2 text-end">
+                        <label for="stock_{{ i }}">Stock {{ i }}:</label>
+                    </div>
+                    <div class="col-md-4">
+                        <input class="form-control" type="text" name="stock_{{ i }}" id="stock_{{ i }}" required>
+                    </div>
+                    <div class="col-md-3 text-end">
+                        <label for="allocation_{{ i }}">Allocation {{ i }}:</label>
+                    </div>
+                    <div class="col-md-3">
+                        <input class="form-control ms-n2" type="number" name="allocation_{{ i }}" id="allocation_{{ i }}" step="any" required>
+                    </div>
+                </div>
                 {% endfor %}
             </div>
             <button type="button" onclick="addFields()">Add More Stocks</button><br><br>
-            <input type="submit" value="Update Portfolio">
+            <div class="d-flex justify-content-center">
+                <input type="submit" value="Update Portfolio" class="btn btn-secondary">
+            </div>
         </form>
     </div>
     <script>
@@ -20,37 +34,65 @@
         const maxFields = 10;  // Maximum number of fields
 
         function addFields() {
-            if (fieldCount >= maxFields) {
-                alert("You can only add up to 10 stocks.");
-                return;
-            }
-            fieldCount++;
+        if (fieldCount >= maxFields) {
+            alert("You can only add up to 10 stocks.");
+            return;
+        }
+        fieldCount++;
 
-            const container = document.getElementById('stock-fields');
+        const container = document.getElementById('stock-fields');
 
-            const stockLabel = document.createElement('label');
-            stockLabel.innerHTML = `Stock ${fieldCount}: `;
-            container.appendChild(stockLabel);
+        // Create a new row div with the 'row' and 'mb-3' classes
+        const rowDiv = document.createElement('div');
+        rowDiv.className = 'row mb-3 updateRow';
 
-            const stockInput = document.createElement('input');
-            stockInput.type = 'text';
-            stockInput.name = `stock_${fieldCount}`;
-            stockInput.required = true;
-            container.appendChild(stockInput);
+        // Create and append the Stock label
+        const stockLabelDiv = document.createElement('div');
+        stockLabelDiv.className = 'col-md-2 text-end';
+        const stockLabel = document.createElement('label');
+        stockLabel.setAttribute('for', `stock_${fieldCount}`);
+        stockLabel.innerHTML = `Stock ${fieldCount}:`;
+        stockLabelDiv.appendChild(stockLabel);
 
-            const allocationLabel = document.createElement('label');
-            allocationLabel.innerHTML = ` Allocation ${fieldCount}: `;
-            container.appendChild(allocationLabel);
+        // Create and append the Stock input field
+        const stockInputDiv = document.createElement('div');
+        stockInputDiv.className = 'col-md-4';
+        const stockInput = document.createElement('input');
+        stockInput.type = 'text';
+        stockInput.name = `stock_${fieldCount}`;
+        stockInput.id = `stock_${fieldCount}`;
+        stockInput.className = 'form-control';
+        stockInput.required = true;
+        stockInputDiv.appendChild(stockInput);
 
-            const allocationInput = document.createElement('input');
-            allocationInput.type = 'number';
-            allocationInput.name = `allocation_${fieldCount}`;
-            allocationInput.step = 'any';
-            allocationInput.required = true;
-            container.appendChild(allocationInput);
+        // Create and append the Allocation label
+        const allocationLabelDiv = document.createElement('div');
+        allocationLabelDiv.className = 'col-md-3 text-end';
+        const allocationLabel = document.createElement('label');
+        allocationLabel.setAttribute('for', `allocation_${fieldCount}`);
+        allocationLabel.innerHTML = `Allocation ${fieldCount}:`;
+        allocationLabelDiv.appendChild(allocationLabel);
 
-            const br = document.createElement('br');
-            container.appendChild(br);
+        // Create and append the Allocation input field
+        const allocationInputDiv = document.createElement('div');
+        allocationInputDiv.className = 'col-md-3';
+        const allocationInput = document.createElement('input');
+        allocationInput.type = 'number';
+        allocationInput.name = `allocation_${fieldCount}`;
+        allocationInput.id = `allocation_${fieldCount}`;
+        allocationInput.className = 'form-control';
+        allocationInput.step = 'any';
+        allocationInput.required = true;
+        allocationInputDiv.appendChild(allocationInput);
+
+        // Append all the new elements to the row div
+        rowDiv.appendChild(stockLabelDiv);
+        rowDiv.appendChild(stockInputDiv);
+        rowDiv.appendChild(allocationLabelDiv);
+        rowDiv.appendChild(allocationInputDiv);
+
+        // Append the row div to the container
+        container.appendChild(rowDiv);
         }
     </script>
 {% endblock %}
