@@ -1,24 +1,42 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Portfolio</title>
-</head>
-<body>
-    <header>
-        <h1>Visualization of Portfolio</h1> <!-- This is the new header -->
-    </header>
+{% extends "base.html" %}
 
-    <section>
-        <h2>{{ username }}'s Portfolio</h2> <!-- You can keep this or remove it if not needed -->
-
-        <!-- Display the portfolio image -->
-        <img src="{{ url_for('static', filename=portfolio_image_path) }}" alt="{{ username }}'s Portfolio Graph">
-
-        <!-- You can add additional sections or information here -->
-    </section>
+{% block content %}
+    <div style="text-align: center;">
+        <h1>Portfolios of the Week: </h1>
+        <div class="row league-section">
+            <div class="col-md-3 leaders">
+                <h3 class="ml-3 mt-1">Leaders: </h3>
+            </div>
+            <div class="col-md-9">
+                <img src="{{ url_for('static', filename=portfolio_image_path) }}" alt="{{ username }}'s Portfolio Graph" style="float: right; margin-right: 20px; width: 70%">
+            </div>
+    </div>
+    </div>
+    <hr class="line">
+    <div style="text-align: center;">
+        <h1>Best Historical Return Potfolios: </h1>
+        <div class="row league-section">
+            <div class="col-md-3 leaders">
+                <h3 class="ml-3 mt-1">Leaders: </h3>
+    
+            </div>
+            <div class="col-md-9">
+                <img src="{{ url_for('static', filename=portfolio_image_path) }}" alt="{{ username }}'s Portfolio Graph" style="float: right; margin-right: 20px; width: 70%">
+            </div>
+        </div>
+    </div>
+    <hr class="line">
+    <div style="text-align: center">
+        <h1>User's Portfolio vs. Market </h1>
+        <div class="row league-section">
+            <div class="col-md-3 leaders">
+                <h3 class="ml-3 mt-1">Leaders: </h3>
+            </div>
+            <div class="col-md-9">
+                <img src="{{ url_for('static', filename=portfolio_image_path) }}" alt="{{ username }}'s Portfolio Graph" style="float: right; margin-right: 20px; width: 70%">
+            </div>
+        </div>
+    </div>
 
     <!-- Other HTML content can go here -->
-</body>
-</html>
+{% endblock %}
