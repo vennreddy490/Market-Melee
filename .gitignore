@@ -2,4 +2,10 @@ __pycache__/
 
 data/
 
+stock_graphs/
+
+user_portfolio_graphs/
+
+user_portfolios/
+
 .env
