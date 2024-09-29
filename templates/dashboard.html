@@ -58,11 +58,11 @@
                 <div class="row">
                     <div class="col-md-3 stat-style" style="text-align: left;">
                         <div>
-                            <p><strong>Cumulative Return:</strong> {{ stock_stats['Cumulative Return'] }}</p>
-                            <p><strong>Avg. Daily Return:</strong> {{ stock_stats['Avg. Daily Return'] }}</p>
-                            <p><strong>Volatility (Std):</strong> {{ stock_stats['Volatility'] }}</p>
-                            <p><strong>Sharpe Ratio:</strong> {{ stock_stats['Sharpe Ratio'] }}</p>
-                            <p><strong>Sortino Ratio:</strong> {{ stock_stats['Sortino Ratio'] }}</p>
+                            <p><a href="#" data-toggle="modal" data-target="#cumulativeReturnModal" style="color: black"><strong>Cumulative Return:</strong></a> {{ stock_stats['Cumulative Return'] }}</p>
+                            <p><a href="#" data-toggle="modal" data-target="#avgDailyReturnModal" style="color: black"><strong>Avg. Daily Return:</strong></a> {{ stock_stats['Avg. Daily Return'] }}</p>
+                            <p><a href="#" data-toggle="modal" data-target="#volatilityModal" style="color: black"><strong>Volatility (Std):</strong></a> {{ stock_stats['Volatility'] }}</p>
+                            <p><a href="#" data-toggle="modal" data-target="#sharpeRatioModal" style="color: black"><strong>Sharpe Ratio:</strong></a> {{ stock_stats['Sharpe Ratio'] }}</p>
+                            <p><a href="#" data-toggle="modal" data-target="#sortinoRatioModal" style="color: black"><strong>Sortino Ratio:</strong></a> {{ stock_stats['Sortino Ratio'] }}</p>
                         </div>
                         <div class="tips">
                             <p class="fs-2"><strong>Want to learn what these mean?</strong></p>
@@ -84,6 +84,150 @@
                     window.location.href = 'update_portfolio';
                 }
             </script>
+            <!-- Storing Modal Stock Statistic Descriptions Here-->
+            {% if valid_stock %}
+            <!--Cumulative Return Modal-->
+            <div class="modal fade" id="cumulativeReturnModal" tabindex="-1" role="dialog" aria-labelledby="cumulativeReturnModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="cumulativeReturnModalLabel">Cumulative Return Details</h5>
+                        </div>
+                        <div class="modal-body">
+                            <p>The <strong>Cumulative Return</strong> is the <strong>TOTAL</strong> return investment
+                                for a given time period, otherwise known as net gain, of a specific stock. </p>
+                                <p>
+                                In this case, <strong>{{ stock_stats['stock_name'] }}</strong>, had a Cumulative Return of 
+                                {{ (stock_stats['Cumulative Return'] * 100) | round(3) }}%.
+                                The higher this percent value, the better the return over time!
+                            </p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Average Daily Return Modal-->
+            <div class="modal fade" id="avgDailyReturnModal" tabindex="-1" role="dialog" aria-labelledby="avgDailyReturnLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="avgDailyReturnModalLabel">Average Daily Return Details</h5>
+                        </div>
+                        <div class="modal-body">
+                            <p> The <strong>Average Daily Return</strong> is the <strong>TOTAL</strong> return value of
+                                a stock at the end of each trading day. This is calculated by finding the percent difference of
+                                the starting value at the start of each trading day with the closing value, or ending value, at 
+                                the end of the trading day. Every week contains 5 trading days, for every weekday.
+                                However, if a holiday happens to land on a trading day, it does not count.
+                            </p>
+                            <p>
+                                In this case, <strong>{{ stock_stats['stock_name'] }}</strong>, had an 
+                                <strong>Average Daily Return</strong> of {{ (stock_stats['Avg. Daily Return'] * 100) | round(3) }}%.
+                                The higher this percentage value, the better return on a day to day basis!
+                            </p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--Volatility Modal-->
+            <div class="modal fade" id="volatilityModal" tabindex="-1" role="dialog" aria-labelledby="volatilityLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="volatilityLabel">Volatility Details</h5>
+                        </div>
+                        <div class="modal-body">
+                            <p> The <strong>Volatility</strong> of a stock determines how risky or unpredictable a stock is. 
+                                The Volatility is otherwise known as the <strong>Standard Deviation</strong> of a stock, where 
+                                the higher the value, the higher the risk and unpredictability, and the lower the value, the lower
+                                the risk and unpredictability. Stocks that have a smaller volatility value tend to be more safe to 
+                                invest in, whereas stocks that have a larger volatility value tend to be more risky to invest in!
+                            </p>                                
+                            {% if stock_stats['Volatility'] > 0.30 %}
+                                <p>In this case, <strong>{{ stock_stats['stock_name'] }}</strong>, has a <strong>Volatility Value</strong> 
+                                    of {{ (stock_stats['Volatility'] * 100) | round(3) }}%. Typically, values above 30% are seen as a 
+                                    highly volatile stock!
+                                </p>
+                            {% elif stock_stats['Volatility'] > 0.15 %}
+                                <p>In this case, <strong>{{ stock_stats['stock_name'] }}</strong>, has a <strong>Volatility Value</strong> 
+                                    of {{ (stock_stats['Volatility'] * 100) | round(3) }}%. Typically, values between 15% and 30% are seen as a 
+                                    middle of the pack stock in terms of volatility!
+                                </p>
+                            {% else %}
+                                <p>In this case, <strong>{{ stock_stats['stock_name'] }}</strong>, has a <strong>Volatility Value</strong> 
+                                    of {{ (stock_stats['Volatility'] * 100) | round(3) }}%. Typically, values below 15% are seen as a 
+                                    a very stable stock, and are considered safer to invest in!
+                                </p>
+                            {% endif %}
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--Sharpe Ratio Modal-->
+            <div class="modal fade" id="sharpeRatioModal" tabindex="-1" role="dialog" aria-labelledby="sharpeRatioLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="sharpeRatioLabel">Sharpe Ratio Details</h5>
+                        </div>
+                        <div class="modal-body">
+                            <p> 
+                                The <strong>Sharpe Ratio</strong> is an indication of how much <strong>return</strong> they will
+                                get for the <strong>risk</strong> they take. For instance, it helps investers figure out whether 
+                                or not they are getting a good return, relative to the amount of risk they take.
+                            </p>
+                            <p>
+                                In this case, <strong>{{ stock_stats['stock_name']}}</strong>, has a Sharpe Ratio value of 
+                                {{ stock_stats['Sharpe Ratio'] | round(3) }}. The larger the value, the better the invester's 
+                                <strong>Return / Risk</strong> ratio.
+                            </p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!--Sortino Ratio Modal-->
+            <div class="modal fade" id="sortinoRatioModal" tabindex="-1" role="dialog" aria-labelledby="sortinoRatioLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="sortinoRatioLabel">Sortino Ratio Details</h5>
+                        </div>
+                        <div class="modal-body">
+                            <p> The <strong>Sortino Ratio</strong> is a variation of the <strong>Sharpe Ratio</strong>, 
+                                where it considers the risk only when a stock has a <strong>downside risk</strong>, otherwise 
+                                known as their losses. This ratio is more precise since it only takes into account of the 
+                                downward risk, instead of taking into account both positive and negative returns.
+                            </p>
+                            <p>
+                                In this case, <strong>{{ stock_stats['stock_name']}}</strong>, has a Sharpe Ratio value of 
+                                {{ stock_stats['Sortino Ratio'] | round(3) }}. The larger the value, the better the invester's 
+                                <strong>Return / Risk</strong> ratio.
+                            </p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--End Modal List-->
+            {% endif %}
         </div>
     </div>
+    
 {% endblock %}
