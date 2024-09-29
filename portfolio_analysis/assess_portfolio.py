@@ -204,9 +204,13 @@ def plot_user_vs_top_three_historical(username, top_three):
     user_df['Date'] = pd.to_datetime(user_df['Date'])
     user_df.set_index('Date', inplace=True)
 
+    # Normalize the user's portfolio returns
+    user_df['Normalized'] = user_df['Portfolio'] / user_df['Portfolio'].iloc[0]
+
     # Plot current user's portfolio
+    # plt.style.use('seaborn-v0_8-poster')
     plt.figure(figsize=(10, 6))
-    plt.plot(user_df.index, user_df['Portfolio'], label=username, linewidth=2)
+    plt.plot(user_df.index, user_df['Normalized'], label=username, linewidth=2)
 
     # Loop through the top three users in the dictionary and plot their portfolios
     for top_user, user_data in top_three.items():
@@ -221,15 +225,28 @@ def plot_user_vs_top_three_historical(username, top_three):
         top_user_df['Date'] = pd.to_datetime(top_user_df['Date'])
         top_user_df.set_index('Date', inplace=True)
 
+        # Normalize the top user's portfolio returns
+        top_user_df['Normalized'] = top_user_df['Portfolio'] / top_user_df['Portfolio'].iloc[0]
+
         # Plot the portfolio of the top user
-        plt.plot(top_user_df.index, top_user_df['Portfolio'], label=top_user, linestyle='--')
+        plt.plot(top_user_df.index, top_user_df['Normalized'], label=top_user, linestyle='--')
 
 
     # Adding titles and labels
-    plt.title('Comparison of User Portfolio vs. Top Three (Based on Normalized Returns)')
-    plt.xlabel('Date')
-    plt.ylabel('Portfolio Value')
+    plt.title('League Leaders: Best Historical Portfolios', fontsize=16)
+    plt.xlabel('Date', fontsize=12)
+    plt.ylabel('(Normalized) Portfolio Value', fontsize=12)
+
+        # Format the x-axis dates
+    plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%b-%d'))
+    plt.gca().xaxis.set_major_locator(mdates.WeekdayLocator(interval=1))
+    plt.xticks(rotation=45)  # Rotate date labels for better fit
+
     plt.legend(loc='best')
+
+    # Add gridlines and adjust layout
+    plt.grid(True, which='both', linestyle='--', linewidth=0.5)
+    plt.tight_layout()
 
     # Show the plot
     # Save the plot to a file
