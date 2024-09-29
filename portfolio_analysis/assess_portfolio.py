@@ -135,7 +135,7 @@ def plot_solo_stock(symbol):
     plt.grid(True)
 
     # Save the plot to a file
-    image_directory = 'stock_graphs'
+    image_directory = 'static/stock_graphs'
     if not os.path.exists(image_directory):
         os.makedirs(image_directory)
     image_path = f"{image_directory}/{symbol}_returns.png"
