@@ -183,7 +183,7 @@ def find_historical_leaders(username):
     top_three_portfolios = portfolio_returns_df.sort_values(by='normalized_return', ascending=False).head(3)
 
     # Convert df to a dict for passage into plotting method:
-    top_three_portfolios = top_three_portfolios.to_dict(orient='records')
+    top_three_portfolios = top_three_portfolios.set_index('user').to_dict(orient='index')
 
     print(f"The type of top_three_portfolios is: {type(top_three_portfolios)}")
     print(top_three_portfolios)
@@ -208,11 +208,8 @@ def plot_user_vs_top_three_historical(username, top_three):
     plt.figure(figsize=(10, 6))
     plt.plot(user_df.index, user_df['Portfolio'], label=username, linewidth=2)
 
-    # Load and plot the top three portfolios (assuming top_three is a list of dictionaries)
-    for entry in top_three:
-        # Access top_user from the list entry
-        top_user = entry['user']
-        print(f"type of top_user: {type(top_user)}")
+    # Loop through the top three users in the dictionary and plot their portfolios
+    for top_user, user_data in top_three.items():
         print(f"top_user: {top_user}")
         
         # Construct the file name directly using an f-string

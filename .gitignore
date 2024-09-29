@@ -8,5 +8,7 @@ user_portfolio_graphs/
 
 user_portfolios/
 
+static/temp_graphs/
+
 .env
 

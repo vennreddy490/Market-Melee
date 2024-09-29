@@ -187,14 +187,14 @@ def league():
 
     print(f"The user is: {username}")
 
-    print("Before: Calling find_recent_leaders")
-    top_three = find_historical_leaders(username)
+    # print("Before: Calling find_recent_leaders")
+    # top_three = find_historical_leaders(username)
 
-    print(f"The type of top_three is: {type(top_three)}")
-    print(f"top_three is: {top_three}")
+    # print(f"The type of top_three is: {type(top_three)}")
+    # print(f"top_three is: {top_three}")
 
-    plot_user_vs_top_three_historical(username, top_three)
-    print("After: Calling find_recent_leaders")
+    # plot_user_vs_top_three_historical(username, top_three)
+    # print("After: Calling find_recent_leaders")
 
     allocs = user_data.get('allocations', [])
     sv = user_data.get('portfolio_value', 0)
@@ -230,11 +230,27 @@ def league():
     port_val_df.columns = ['Date', 'Portfolio']
     port_val_df.to_csv(file_path, index=False)
 
+
+    # RUNNING COMPARE TO HISTORICAL LEADERS AND PLOT THEM
+    print("Before: Calling find_recent_leaders")
+    top_three = find_historical_leaders(username)
+
+    print(f"The type of top_three is: {type(top_three)}")
+    print(f"top_three is: {top_three}")
+
+    plot_user_vs_top_three_historical(username, top_three)
+    print("After: Calling find_recent_leaders")
+
+
+
     # Plot the user portfolio and save the image
     plot_user_portfolio(username)
 
+
+    
+
     # Serve the image and display it to the frontend
-    image_filename = f"user_portfolio_graphs/{username}_portfolio_graph.png"
+    image_filename = f"temp_graphs/{username}_vs_leaders.png"
 
     # Check if the image exists before serving
     image_static_path = 'static/' + image_filename
