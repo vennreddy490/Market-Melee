@@ -47,6 +47,14 @@ def calculate_metrics(file_path):
         # Calculate average daily return
         avg_daily_return = stock_df['Daily_Return'].mean()
 
+        # Round to four decimal places
+        cumulative_return = round(cumulative_return, 4)
+        volatility = round(volatility, 4)
+        avg_daily_return = round(avg_daily_return, 4)
+        sharpe_ratio = round(sharpe_ratio, 4)
+        sortino_ratio = round(sortino_ratio, 4)
+
+
         # Return the calculated metrics
         return {
             'Cumulative Return': cumulative_return,
@@ -91,8 +99,8 @@ if __name__ == "__main__":
             document = {
                 'stock_name': symbol,
                 'Cumulative Return': float(metrics['Cumulative Return']),
-                'Average Daily Return': float(metrics['Average Daily Return']),
-                'Volatility (Standard Deviation)': float(metrics['Volatility (Standard Deviation)']),
+                'Avg. Daily Return': float(metrics['Average Daily Return']),
+                'Volatility': float(metrics['Volatility (Standard Deviation)']),
                 'Sharpe Ratio': float(metrics['Sharpe Ratio']),
                 'Sortino Ratio': float(metrics['Sortino Ratio']),
             }
