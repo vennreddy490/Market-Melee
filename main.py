@@ -302,3 +302,9 @@ def serve_image():
     # Serve the image from the user portfolio directory
     return send_from_directory(GRAPH_DIR, image_filename)
 
+@app.route('/logout')
+def logout():
+    # Clear the user session
+    session.pop('username', None)
+    # Redirect to the welcome page
+    return redirect(url_for('welcome'))
