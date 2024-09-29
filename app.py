@@ -206,24 +206,10 @@ def user_data_test():
     port_val_df.columns = ['Date', 'Portfolio']
     port_val_df.to_csv(file_path, index=False)
 
-    return "<p>This should have created a dataframe and printed it in the console.</p>"
-
-@app.route("/visualization_test")
-def visualization_test():
-    username = session.get('username')
-    print(f"The user is: {username}")
-    print("DEBUG TEST 1: CALLING PLOT USER PORTFOLIO")
+    # Plot the user portfolio and save the image
     plot_user_portfolio(username)
-    print("DEBUG TEST 2: AFTER CALLING PLOT USER PORTFOLIO")
 
-    return "<p>This should have created a graph of the user's portfolio.</p>"
-
-# @app.route('/display_portfolio/<username>')
-# def display_portfolio(username):
-@app.route('/display_portfolio')
-def display_portfolio():
-    username = session.get('username')
-    # Construct the image filename based on the username
+    # Serve the image and display it to the frontend
     image_filename = f"{username}_portfolio_graph.png"
 
     # Check if the image exists before serving
@@ -232,6 +218,33 @@ def display_portfolio():
         return render_template('display_image.html', username=username)
     else:
         return f"Image for {username} not found.", 404
+
+    return "<p>This should have created a dataframe and printed it in the console.</p>"
+
+# @app.route("/visualization_test")
+# def visualization_test():
+#     username = session.get('username')
+#     print(f"The user is: {username}")
+#     print("DEBUG TEST 1: CALLING PLOT USER PORTFOLIO")
+#     plot_user_portfolio(username)
+#     print("DEBUG TEST 2: AFTER CALLING PLOT USER PORTFOLIO")
+
+#     return "<p>This should have created a graph of the user's portfolio.</p>"
+
+# # @app.route('/display_portfolio/<username>')
+# # def display_portfolio(username):
+# @app.route('/display_portfolio')
+# def display_portfolio():
+#     username = session.get('username')
+#     # Construct the image filename based on the username
+#     image_filename = f"{username}_portfolio_graph.png"
+
+#     # Check if the image exists before serving
+#     image_path = os.path.join(GRAPH_DIR, image_filename)
+#     if os.path.exists(image_path):
+#         return render_template('display_image.html', username=username)
+#     else:
+#         return f"Image for {username} not found.", 404
     
 @app.route('/portfolio_image')
 def serve_image():
