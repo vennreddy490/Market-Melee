@@ -143,3 +143,103 @@ def plot_solo_stock(symbol):
     plt.savefig(image_path)
     plt.close()
     print(f"Graphed and saved stock graph of {symbol}.")
+
+def find_historical_leaders(username):
+    # Directory containing the user portfolios
+    directory = 'user_portfolios'
+
+    portfolio_returns = []
+
+    # Loop through each CSV file in the directory
+    for filename in os.listdir(directory):
+        if filename.endswith('.csv'):
+            user = filename.replace('_portfolio.csv', '')
+
+            # Skip the portfolio of the current session user
+            if user == username:
+                continue
+
+            # Load the CSV file into a DataFrame
+            df = pd.read_csv(os.path.join(directory, filename), usecols=["Date", "Portfolio"])
+
+            # Convert 'Date' column to datetime and set as index
+            df['Date'] = pd.to_datetime(df['Date'])
+            df.set_index('Date', inplace=True)
+
+            # Calculate the normalized return as (last value / first value)
+            first_value = df['Portfolio'].iloc[0]
+            last_value = df['Portfolio'].iloc[-1]
+            normalized_return = last_value / first_value
+            print(f"The normalized return of {user} is {normalized_return}")
+
+
+            # Store the user and their portfolio difference
+            portfolio_returns.append({'user': user, 'normalized_return': normalized_return})
+    
+    print(f"at the end, portfolio_returns looks like: {portfolio_returns}")
+
+    # Convert the list to a DataFrame for easier sorting
+    portfolio_returns_df = pd.DataFrame(portfolio_returns)
+    top_three_portfolios = portfolio_returns_df.sort_values(by='normalized_return', ascending=False).head(3)
+
+    # Convert df to a dict for passage into plotting method:
+    top_three_portfolios = top_three_portfolios.to_dict(orient='records')
+
+    print(f"The type of top_three_portfolios is: {type(top_three_portfolios)}")
+    print(top_three_portfolios)
+    print("\n\n\n\n")
+    return top_three_portfolios
+
+def plot_user_vs_top_three_historical(username, top_three):
+    directory = 'user_portfolios'
+
+    print(f"Username: {username} ")
+
+    # Load current user's portfolio
+    user_file = f'{directory}/{username}_portfolio.csv'
+
+    print(f"user_file: {user_file}")
+
+    user_df = pd.read_csv(user_file, usecols=["Date", "Portfolio"])
+    user_df['Date'] = pd.to_datetime(user_df['Date'])
+    user_df.set_index('Date', inplace=True)
+
+    # Plot current user's portfolio
+    plt.figure(figsize=(10, 6))
+    plt.plot(user_df.index, user_df['Portfolio'], label=username, linewidth=2)
+
+    # Load and plot the top three portfolios (assuming top_three is a list of dictionaries)
+    for entry in top_three:
+        # Access top_user from the list entry
+        top_user = entry['user']
+        print(f"type of top_user: {type(top_user)}")
+        print(f"top_user: {top_user}")
+        
+        # Construct the file name directly using an f-string
+        top_user_file = f'{directory}/{top_user}_portfolio.csv'
+        print(f"top_user_file: {top_user_file}")
+        
+        # Load the top user's portfolio data
+        top_user_df = pd.read_csv(top_user_file, usecols=["Date", "Portfolio"])
+        top_user_df['Date'] = pd.to_datetime(top_user_df['Date'])
+        top_user_df.set_index('Date', inplace=True)
+
+        # Plot the portfolio of the top user
+        plt.plot(top_user_df.index, top_user_df['Portfolio'], label=top_user, linestyle='--')
+
+
+    # Adding titles and labels
+    plt.title('Comparison of User Portfolio vs. Top Three (Based on Normalized Returns)')
+    plt.xlabel('Date')
+    plt.ylabel('Portfolio Value')
+    plt.legend(loc='best')
+
+    # Show the plot
+    # Save the plot to a file
+    image_directory = 'static/temp_graphs'
+    if not os.path.exists(image_directory):
+        os.makedirs(image_directory)
+    image_path = f"{image_directory}/{username}_vs_leaders.png"
+    plt.savefig(image_path)
+    plt.close()
+    print(f"Graphed and saved stock graph of {username} vs top three leaders.")

@@ -187,6 +187,15 @@ def league():
 
     print(f"The user is: {username}")
 
+    print("Before: Calling find_recent_leaders")
+    top_three = find_historical_leaders(username)
+
+    print(f"The type of top_three is: {type(top_three)}")
+    print(f"top_three is: {top_three}")
+
+    plot_user_vs_top_three_historical(username, top_three)
+    print("After: Calling find_recent_leaders")
+
     allocs = user_data.get('allocations', [])
     sv = user_data.get('portfolio_value', 0)
 
@@ -203,10 +212,6 @@ def league():
     allocs = user_data.get('allocations', [])
     allocs = [alloc / 100 for alloc in allocs]
     sv = user_data.get('portfolio_value', 0)
-
-    print(f"\nHere is the value getting passed in for allocs: {allocs}")
-    print(f"\nHere is the value getting passed in for sv: {sv}")
-
 
     port_val = get_portfolio_returns(df_prices, allocs, sv)
     print(f"\nget_portfolio_returns() returns: \n{port_val.head(10)}")
