@@ -2,11 +2,11 @@ __pycache__/
 
 data/
 
-stock_graphs/
+static/stock_graphs
 
 user_portfolio_graphs/
 
 user_portfolios/
 
 .env
-stock_graphs/AAPL_returns.png
+
