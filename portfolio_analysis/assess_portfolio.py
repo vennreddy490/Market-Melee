@@ -7,6 +7,7 @@ import matplotlib.dates as mdates
 from matplotlib.ticker import MaxNLocator
 import math
 import os
+
 matplotlib.use('Agg')  # Set non-interactive backend
 
 def get_data(symbols, dates, path="data"):
@@ -56,6 +57,21 @@ def get_portfolio_returns(prices, allocations, start_val=10000):
     return total_portfolio
 
 def plot_user_portfolio(username):
+    print('DEBUG')
+    print('DEBUG')
+    print('DEBUG')
+    print('DEBUG')
+    print('DEBUG')
+    print('DEBUG')
+    print(plt.style.available)  # Check if seaborn styles are listed
+    print('DEBUG')
+    print('DEBUG')
+    print('DEBUG')
+    print('DEBUG')
+    print('DEBUG')
+    print('DEBUG')
+    print('DEBUG')
+
     # Set up titles and labels
     title = f"{username}'s Portfolio Performance Over Time"
     xlabel = "Date"
@@ -77,7 +93,7 @@ def plot_user_portfolio(username):
     df['Portfolio_normalized'] = df['Portfolio'] / df['Portfolio'].iloc[0]
 
     # Set the plot style
-    plt.style.use('seaborn')
+    plt.style.use('seaborn-v0_8-poster')
 
     # Create a figure and axis object
     plt.figure(figsize=(12, 6))
