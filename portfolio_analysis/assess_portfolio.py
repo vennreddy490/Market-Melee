@@ -58,7 +58,7 @@ def get_portfolio_returns(prices, allocations, start_val=10000):
 
 def plot_user_portfolio(username):
     # Set up titles and labels
-    title = f"{username}'s Portfolio Performance Over Time"
+    title = f"{username}'s Portfolio vs Market (SPY)"
     xlabel = "Date"
     ylabel = "Normalized Portfolio Value"
     
@@ -86,6 +86,16 @@ def plot_user_portfolio(username):
     # Plot the normalized portfolio
     df['Portfolio_normalized'].plot(color='#1f77b4', linewidth=2, label='Portfolio')
 
+    # Read the SPY CSV, only keeps the Date and Adj Close cols
+    spy_df = pd.read_csv('data/SPY.csv', usecols=["Date", "Adj Close"])
+    spy_df['Date'] = pd.to_datetime(spy_df['Date'])
+    spy_df.set_index('Date', inplace=True)
+
+    # Normalize the portfolio values and plot it
+    spy_df['SPY_normalized'] = spy_df['Adj Close'] / spy_df['Adj Close'].iloc[0]
+    spy_df['SPY_normalized'].plot(color='red', linewidth=2, label='SPY', linestyle='--')
+
+
     # Set title and labels with increased font sizes
     plt.title(title, fontsize=16)
     plt.xlabel(xlabel, fontsize=12)
@@ -99,10 +109,8 @@ def plot_user_portfolio(username):
     # Customize the legend
     plt.legend(loc='upper left', fontsize=12)
 
-    # Add gridlines
+    # Add gridlines and adjust layout
     plt.grid(True, which='both', linestyle='--', linewidth=0.5)
-
-    # Adjust layout
     plt.tight_layout()
 
     # Save the plot to a file
@@ -112,7 +120,7 @@ def plot_user_portfolio(username):
     image_path = f"{image_directory}/{username}_portfolio_graph.png"
     plt.savefig(image_path)
     plt.close()
-    print(f"{username} Portfolio Graph saved in: {image_path}")
+    print(f"{username} Portfolio vs SPY Graph saved in: {image_path}")
 
 def plot_solo_stock(symbol):
     # Set up titles and labels
