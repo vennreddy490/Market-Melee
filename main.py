@@ -232,14 +232,14 @@ def league():
 
 
     # RUNNING COMPARE TO HISTORICAL LEADERS AND PLOT THEM
-    print("Before: Calling find_recent_leaders")
+    print("Before: Calling find_historical_leaders")
     top_three = find_historical_leaders(username)
 
     print(f"The type of top_three is: {type(top_three)}")
     print(f"top_three is: {top_three}")
 
     plot_user_vs_top_three_historical(username, top_three)
-    print("After: Calling find_recent_leaders")
+    print("After: Calling find_historical_leaders")
 
 
 
@@ -274,3 +274,82 @@ def apple():
     print("attempting to read and plot apple stock")
     plot_solo_stock('AAPL')
     return "<p>This should have graphed apple stock.</p>"
+
+@app.route("/test")
+def test():
+    username = session.get('username')
+    user_data = test_collection.find_one({'user': username})
+
+    print(f"The user is: {username}")
+
+    # print("Before: Calling find_recent_leaders")
+    # top_three = find_historical_leaders(username)
+
+    # print(f"The type of top_three is: {type(top_three)}")
+    # print(f"top_three is: {top_three}")
+
+    # plot_user_vs_top_three_historical(username, top_three)
+    # print("After: Calling find_recent_leaders")
+
+    allocs = user_data.get('allocations', [])
+    sv = user_data.get('portfolio_value', 0)
+
+    # print(f"symbols: {symbols}")
+    # print(f"allocs: {allocs}")
+    # print(f"sv: {sv}")
+
+    dates = pd.date_range('2024-08-01', '2024-09-27')
+    symbols = user_data.get('collection_of_stocks', [])
+    df_prices = get_data(symbols, dates)
+    print("Data:")
+    print(df_prices.head())
+
+    allocs = user_data.get('allocations', [])
+    allocs = [alloc / 100 for alloc in allocs]
+    sv = user_data.get('portfolio_value', 0)
+
+    port_val = get_portfolio_returns(df_prices, allocs, sv)
+    print(f"\nget_portfolio_returns() returns: \n{port_val.head(10)}")
+
+    directory = 'user_portfolios'
+    
+    filename = f"{session['username']}_portfolio.csv"
+    file_path = os.path.join(directory, filename)
+
+    print(f"The type of port_val: {type(port_val)}")
+
+    # port_val.to_csv(file_path, index=True)
+    # port_val.to_csv(file_path, index=True)
+
+    port_val_df = port_val.reset_index()
+    port_val_df.columns = ['Date', 'Portfolio']
+    port_val_df.to_csv(file_path, index=False)
+
+
+    # RUNNING COMPARE TO HISTORICAL LEADERS AND PLOT THEM
+    print("Before: Calling find_recent_leaders")
+    top_three = find_weekly_leaders(username)
+
+    print(f"The type of top_three is: {type(top_three)}")
+    print(f"top_three is: {top_three}")
+
+    plot_user_vs_top_three_weekly(username, top_three)
+    print("After: Calling find_recent_leaders")
+
+
+
+    # Plot the user portfolio and save the image
+    plot_user_portfolio(username)
+
+
+    
+
+    # Serve the image and display it to the frontend
+    image_filename = f"temp_graphs_weekly/{username}_vs_leaders.png"
+
+    # Check if the image exists before serving
+    image_static_path = 'static/' + image_filename
+    if os.path.exists(image_static_path):
+        return render_template('league.html', username=username, portfolio_image_path=image_filename)
+    else:
+        return f"Image for {username} not found.", 404

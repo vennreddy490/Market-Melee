@@ -257,3 +257,125 @@ def plot_user_vs_top_three_historical(username, top_three):
     plt.savefig(image_path)
     plt.close()
     print(f"Graphed and saved stock graph of {username} vs top three leaders.")
+
+
+def find_weekly_leaders(username):
+    # Directory containing the user portfolios
+    directory = 'user_portfolios'
+    portfolio_returns = []
+
+    # Loop through each CSV file in the directory
+    for filename in os.listdir(directory):
+        if filename.endswith('.csv'):
+            user = filename.replace('_portfolio.csv', '')
+
+            # Skip the portfolio of the current session user
+            if user == username:
+                continue
+
+            # Load the CSV file into a DataFrame
+            df = pd.read_csv(os.path.join(directory, filename), usecols=["Date", "Portfolio"])
+
+            # Convert 'Date' column to datetime and set as index
+            df['Date'] = pd.to_datetime(df['Date'])
+            df.set_index('Date', inplace=True)
+
+            # Drop all rows except the last 10 (last two workweeks)
+            df = df.tail(10)
+
+            # Calculate the normalized return as (last value / first value) of the remaining 10 rows
+            first_value = df['Portfolio'].iloc[0]
+            last_value = df['Portfolio'].iloc[-1]
+            normalized_return = last_value / first_value
+            print(f"The normalized return of {user} for the last two workweeks is {normalized_return}")
+
+            # Store the user and their portfolio difference
+            portfolio_returns.append({'user': user, 'normalized_return': normalized_return})
+    
+    print(f"At the end, portfolio_returns looks like: {portfolio_returns}")
+
+    # Convert the list to a DataFrame for easier sorting
+    portfolio_returns_df = pd.DataFrame(portfolio_returns)
+    top_three_portfolios = portfolio_returns_df.sort_values(by='normalized_return', ascending=False).head(3)
+
+    # Convert df to a dict for passage into plotting method
+    top_three_portfolios = top_three_portfolios.set_index('user').to_dict(orient='index')
+
+    print(f"The type of top_three_portfolios is: {type(top_three_portfolios)}")
+    print(top_three_portfolios)
+    print("\n\n\n\n")
+    return top_three_portfolios
+
+def plot_user_vs_top_three_weekly(username, top_three):
+    directory = 'user_portfolios'
+
+    print(f"Username: {username} ")
+
+    # Load current user's portfolio
+    user_file = f'{directory}/{username}_portfolio.csv'
+
+    print(f"user_file: {user_file}")
+
+    user_df = pd.read_csv(user_file, usecols=["Date", "Portfolio"])
+    user_df['Date'] = pd.to_datetime(user_df['Date'])
+    user_df.set_index('Date', inplace=True)
+
+    # Drop all rows except the last 10 (last two workweeks)
+    user_df = user_df.tail(10)
+
+    # Normalize the user's portfolio returns
+    user_df['Normalized'] = user_df['Portfolio'] / user_df['Portfolio'].iloc[0]
+
+    # Convert date index to string to treat it as categorical
+    user_df['Date_Str'] = user_df.index.strftime('%b-%d')
+
+    # Plot current user's portfolio using categorical dates
+    plt.figure(figsize=(10, 6))
+    plt.plot(user_df['Date_Str'], user_df['Normalized'], label=username, linewidth=2)
+
+    # Loop through the top three users in the dictionary and plot their portfolios
+    for top_user, user_data in top_three.items():
+        print(f"top_user: {top_user}")
+        
+        # Construct the file name directly using an f-string
+        top_user_file = f'{directory}/{top_user}_portfolio.csv'
+        print(f"top_user_file: {top_user_file}")
+        
+        # Load the top user's portfolio data
+        top_user_df = pd.read_csv(top_user_file, usecols=["Date", "Portfolio"])
+        top_user_df['Date'] = pd.to_datetime(top_user_df['Date'])
+        top_user_df.set_index('Date', inplace=True)
+
+        # Drop all rows except the last 10 (last two workweeks)
+        top_user_df = top_user_df.tail(10)
+
+        # Normalize the top user's portfolio returns
+        top_user_df['Normalized'] = top_user_df['Portfolio'] / top_user_df['Portfolio'].iloc[0]
+
+        # Convert date index to string to treat it as categorical
+        top_user_df['Date_Str'] = top_user_df.index.strftime('%b-%d')
+
+        # Plot the portfolio of the top user
+        plt.plot(top_user_df['Date_Str'], top_user_df['Normalized'], label=top_user, linestyle='--')
+
+    # Adding titles and labels
+    plt.title('League Leaders: Best Weekly Portfolios', fontsize=16)
+    plt.xlabel('Date', fontsize=12)
+    plt.ylabel('(Normalized) Portfolio Value', fontsize=12)
+
+    plt.xticks(rotation=45)  # Rotate date labels for better fit
+
+    plt.legend(loc='best')
+
+    # Add gridlines and adjust layout
+    plt.grid(True, which='both', linestyle='--', linewidth=0.5)
+    plt.tight_layout()
+
+    # Save the plot to a file
+    image_directory = 'static/temp_graphs_weekly'
+    if not os.path.exists(image_directory):
+        os.makedirs(image_directory)
+    image_path = f"{image_directory}/{username}_vs_leaders.png"
+    plt.savefig(image_path)
+    plt.close()
+    print(f"Graphed and saved stock graph of {username} vs top three leaders for the last two workweeks.")
