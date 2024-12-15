@@ -6,7 +6,8 @@ static/stock_graphs
 
 user_portfolio_graphs/
 
-user_portfolios/
+# We'll figure out a way to not have this track changes on the github without breaking the app
+# user_portfolios/ 
 
 static/temp_graphs/
 
